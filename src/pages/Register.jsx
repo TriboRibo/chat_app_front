@@ -13,7 +13,8 @@ const Register = () => {
 	const nav = useNavigate()
 
 	const register = async () => {
-		setError('')
+		setError(null)
+		setSuccess(null)
 		const username = userRef.current?.value
 		const password = passwordRef.current?.value
 		const repeatPassword = passwordConfirmRef.current?.value
@@ -33,26 +34,29 @@ const Register = () => {
 				password: password,
 				repeatPassword: repeatPassword
 			})
-			console.log(response)
-			if (!response.data.success) {
-				console.log('nepavyko', response.data.message)
-				setError(response.data.message)
-			} else {
-				console.log('paviko:', response.data.message)
+			console.log(response.data.message)
+			if (response.data.success) {
 				setSuccess(response.data.message)
 				setTimeout(() => {
 					nav ('/login')
 				}, 500)
+			} else {
+				setError(response.data.message)
 			}
 
 		} catch (error) {
-			// console.error('regi error', error)
-			setError(error.response?.data?.error)
+			if (error.response && error.response.data) {
+				setError(error.response.data.error)
+			} else {
+				setError('an unexpected error')
+			}
+
 		}
 	}
 	//Clear error message when start typing again
 	const handleInputChange = () => {
-		setError('')
+		setError(null)
+		setSuccess(null)
 	}
 
 	return (
