@@ -1,14 +1,21 @@
 import React, {useRef, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import {useSocket} from "../plugins/useSocket.jsx";
+import socket from "../plugins/useSocket.jsx";
 
 const LogIn = () => {
 
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
+	const [connectedUsers, setConnectedUsers] = useState([])
 	const userRef = useRef()
 	const passwordRef = useRef()
 	const nav = useNavigate()
+
+	// useSocket('userListUpdate', (userList) => {
+	// 	setConnectedUsers(userList)
+	// })
 
 	const login = async () => {
 		setError('')
@@ -24,13 +31,14 @@ const LogIn = () => {
 				name: username,
 				password: password,
 			})
-			console.log(response)
+			console.log('logged in:', response.data)
 			if (!response.data.success) {
 				console.log(response.data.message)
 				setError(response.data.message)
 			} else {
-				console.log(response.data.message)
-				setSuccess('login successful!')
+				socket.emit('setUsername', username)
+				console.log('Logged in success for:',response.data.message)
+				setSuccess('Login successful!')
 				setTimeout(() => {
 					nav ('/')
 				}, 500)
