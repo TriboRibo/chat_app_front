@@ -7,18 +7,35 @@ const Home = () => {
 
 	const {users, setUsers, connected, setConnected} = mainStore()
 
-	useEffect(() => {
-		const fetchUsers = async () => {
-			try {
-				const response = await axios.get('http://localhost:2000/getAllMembers')
-				setUsers(response.data.users)
-				console.log('fetched users:', response.data.users)
-			} catch (error) {
-				console.log('error fetching users', error)
-			}
+	// useEffect(() => {
+	// 	const fetchUsers = async () => {
+	// 		try {
+	// 			const response = await axios.get('http://localhost:2000/getAllMembers')
+	// 			setUsers(response.data.users)
+	// 			console.log('fetched users:', response.data.users)
+	// 		} catch (error) {
+	// 			console.log('error fetching users', error)
+	// 		}
+	// 	}
+	// 	fetchUsers()
+	// }, [setUsers])
+
+	const fetchUsers = async () => {
+		try {
+			const response = await axios.get('http://localhost:2000/getAllMembers')
+			setUsers(response.data.users)
+			console.log('fetched users:', response.data.users)
+		} catch (error) {
+			console.log('error fetching users', error)
 		}
+	}
+	useEffect(() => {
 		fetchUsers()
-	}, [setUsers])
+	}, [])
+
+	useSocket('userListUpdate', () => {
+		fetchUsers()
+	})
 
 	//Listen for list updates
 	useSocket('connectedUsersUpdate', (connectedUsers) => {
