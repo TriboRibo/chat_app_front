@@ -1,11 +1,14 @@
 import React, {useRef, useState} from 'react';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import mainStore from "../store/mainStore.jsx";
+import socket from '../plugins/useSocket.jsx'
 
 const Register = () => {
 
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
+	const {addUser} = mainStore()
 
 	const userRef = useRef()
 	const passwordRef = useRef()
@@ -37,6 +40,8 @@ const Register = () => {
 			console.log(response.data.message)
 			if (response.data.success) {
 				setSuccess(response.data.message)
+				// addUser(username)
+				socket.emit('setUsername', username)
 				setTimeout(() => {
 					nav ('/login')
 				}, 500)

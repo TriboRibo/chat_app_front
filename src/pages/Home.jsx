@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {useSocket} from '../plugins/useSocket.jsx'
+import mainStore from "../store/mainStore.jsx";
 
 const Home = () => {
-	const [users, setUsers] = useState([])
-	const [connectedUsers, setConnectedUsers] = useState([])
+
+	const {users, setUsers, connected, setConnected} = mainStore()
 
 	useEffect(() => {
 		const fetchUsers = async () => {
@@ -17,30 +18,32 @@ const Home = () => {
 			}
 		}
 		fetchUsers()
-	}, [])
+	}, [setUsers])
 
 	//Listen for list updates
-	useSocket('userListUpdate', (userList) => {
-		setConnectedUsers(userList)
+	useSocket('connectedUsersUpdate', (connectedUsers) => {
+		setConnected(connectedUsers)
 	})
 
 	return (
 		<>
-			<div className='user-list'>
-				<h2>Registered Users</h2>
-				<ul>
-					{users.map(user => (
-						<li key={user._id}>{user.name}</li>
-					))}
-				</ul>
-			</div>
-			<div className='user-list'>
-				<h2>Connected Users</h2>
-				<ul>
-					{connectedUsers.map((user, index) => (
-						<li key={index}>{user}</li>
-					))}
-				</ul>
+			<div className='flex justify-evenly'>
+				<div className='user-list'>
+					<h2>Registered Users</h2>
+					<ul>
+						{users && users.map(user => (
+							<li key={user._id}>{user.name}</li>
+						))}
+					</ul>
+				</div>
+				<div className='user-list'>
+					<h2>Connected Users</h2>
+					<ul>
+						{connected && connected.map((user, index) => (
+							<li key={index}>{user}</li>
+						))}
+					</ul>
+				</div>
 			</div>
 		</>
 	);

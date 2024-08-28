@@ -1,21 +1,18 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {useSocket} from "../plugins/useSocket.jsx";
 import socket from "../plugins/useSocket.jsx";
+import mainStore from "../store/mainStore.jsx";
 
 const LogIn = () => {
 
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
-	const [connectedUsers, setConnectedUsers] = useState([])
+	const {setConnected} = mainStore()
 	const userRef = useRef()
 	const passwordRef = useRef()
 	const nav = useNavigate()
-
-	// useSocket('userListUpdate', (userList) => {
-	// 	setConnectedUsers(userList)
-	// })
 
 	const login = async () => {
 		setError('')
@@ -37,10 +34,10 @@ const LogIn = () => {
 				setError(response.data.message)
 			} else {
 				socket.emit('setUsername', username)
-				console.log('Logged in success for:',response.data.message)
+				console.log('Logged in success for:', response.data.data.username)
 				setSuccess('Login successful!')
 				setTimeout(() => {
-					nav ('/')
+					nav('/')
 				}, 500)
 			}
 		} catch (error) {
@@ -51,6 +48,10 @@ const LogIn = () => {
 	const handleInputChange = () => {
 		setError('')
 	}
+	//Listen for list updates
+	useSocket('connectedUsersUpdate', (connectedUsers) => {
+		setConnected(connectedUsers)
+	})
 	return (
 		<>
 			<div className='flex items-center justify-center select-none'>
