@@ -41,7 +41,7 @@ const Register = () => {
 			if (response.data.success) {
 				setSuccess(response.data.message)
 				// addUser(username)
-				socket.emit('setUsername', username)
+				socket.emit('userListUpdate')
 				setTimeout(() => {
 					nav ('/login')
 				}, 500)
