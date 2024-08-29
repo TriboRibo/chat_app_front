@@ -4,17 +4,10 @@ const useStore = create((set) => ({
 	users: [],
 	connected: [],
 	setUsers: (users) => set({users}),
-	setConnected: (connected) => set({connected}),
-	addUser: (user) => set((state) => ({
-		users: [...state.users, user]
-	})),
-	addConnected: (user) => set((state) => ({
-		connected: [...state.connected, user],
-		users: [...state.users, user],
-	})),
+	setConnected: (users) => set({connected: users}),
 	removeConnected: (user) => set((state) => ({
-		connected: state.connected.filter((user) => user !== user),
-	}))
+		connected: state.connected.filter((connectedUser) => connectedUser !== user),
+	})),
 }))
 
 export default useStore

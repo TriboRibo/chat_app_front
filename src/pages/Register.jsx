@@ -8,7 +8,6 @@ const Register = () => {
 
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
-	const {addUser} = mainStore()
 
 	const userRef = useRef()
 	const passwordRef = useRef()
@@ -40,7 +39,6 @@ const Register = () => {
 			console.log(response.data.message)
 			if (response.data.success) {
 				setSuccess(response.data.message)
-				// addUser(username)
 				socket.emit('userListUpdate')
 				setTimeout(() => {
 					nav ('/login')
