@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import {useSocket} from "../plugins/useSocket.jsx";
 import socket from "../plugins/useSocket.jsx";
 import mainStore from "../store/mainStore.jsx";
 
@@ -36,6 +35,7 @@ const LogIn = () => {
 				socket.emit('setUsername', username)
 				console.log('Logged in success for:', response.data.data.username)
 				setSuccess('Login successful!')
+				setConnected(response.data.data.username)
 				setTimeout(() => {
 					nav('/')
 				}, 500)
@@ -46,12 +46,10 @@ const LogIn = () => {
 	}
 
 	const handleInputChange = () => {
-		setError('')
+		setError(null)
+		setSuccess(null)
 	}
-	//Listen for list updates
-	useSocket('connectedUsersUpdate', (connectedUsers) => {
-		setConnected(connectedUsers)
-	})
+
 	return (
 		<>
 			<div className='flex items-center justify-center select-none'>
