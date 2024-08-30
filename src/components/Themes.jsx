@@ -5,7 +5,7 @@ const Themes = () => {
 	return (
 		<>
 			<div className="dropdown dropdown-end">
-				<div tabIndex={0} role="button" className="btn btn-outline">
+				<div tabIndex={0} role="button" className="btn btn-outline shadow-md">
 					Theme
 					<svg
 						width="12px"
@@ -16,12 +16,12 @@ const Themes = () => {
 						<path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
 					</svg>
 				</div>
-				<ul tabIndex={0} className="dropdown-content bg-base-300 rounded-box z-[1] w-52 p-2 shadow-2xl mt-1 space-y-1">
+				<ul tabIndex={0} className="dropdown-content bg-base-300 rounded-box z-[1] w-52 p-2 shadow-2xl mt-1 space-y-1 shadow-md">
 					<li>
 						<input
 							type="radio"
 							name="theme-dropdown"
-							className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+							className="theme-controller btn btn-sm btn-block btn-ghost justify-start hover:shadow-md"
 							aria-label="Default"
 							value="default"/>
 					</li>
@@ -29,7 +29,7 @@ const Themes = () => {
 						<input
 							type="radio"
 							name="theme-dropdown"
-							className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+							className="theme-controller btn btn-sm btn-block btn-ghost justify-start hover:shadow-md"
 							aria-label="Retro"
 							value="retro"/>
 					</li>
@@ -37,7 +37,7 @@ const Themes = () => {
 						<input
 							type="radio"
 							name="theme-dropdown"
-							className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+							className="theme-controller btn btn-sm btn-block btn-ghost justify-start hover:shadow-md"
 							aria-label="Cyberpunk"
 							value="cyberpunk"/>
 					</li>
@@ -45,7 +45,7 @@ const Themes = () => {
 						<input
 							type="radio"
 							name="theme-dropdown"
-							className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+							className="theme-controller btn btn-sm btn-block btn-ghost justify-start hover:shadow-md"
 							aria-label="Valentine"
 							value="valentine"/>
 					</li>
@@ -53,7 +53,7 @@ const Themes = () => {
 						<input
 							type="radio"
 							name="theme-dropdown"
-							className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+							className="theme-controller btn btn-sm btn-block btn-ghost justify-start hover:shadow-md"
 							aria-label="Aqua"
 							value="aqua"/>
 					</li>
