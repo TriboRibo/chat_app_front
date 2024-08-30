@@ -8,13 +8,14 @@ const LogIn = () => {
 
 	const [error, setError] = useState(null)
 	const [success, setSuccess] = useState(null)
-	const {setConnected} = mainStore()
+	const {setConnected, setCurrentUser} = mainStore()
 	const userRef = useRef()
 	const passwordRef = useRef()
 	const nav = useNavigate()
 
 	const login = async () => {
 		setError('')
+		setSuccess('')
 		const username = userRef.current?.value
 		const password = passwordRef.current?.value
 
@@ -32,10 +33,16 @@ const LogIn = () => {
 				console.log(response.data.message)
 				setError(response.data.message)
 			} else {
-				socket.emit('setUsername', username)
-				console.log('Logged in success for:', response.data.data.username)
+				socket.emit('setUsername', {
+					id: response.data.data.id,
+					username: response.data.data.username,
+					avatar: response.data.data.avatar,
+				})
+				console.log('Logged in success for:', response.data.data)
 				setSuccess('Login successful!')
-				setConnected(response.data.data.username)
+				setConnected(response.data.data)
+				setCurrentUser(response.data.data)
+				console.log('Current:', response.data.data)
 				setTimeout(() => {
 					nav('/')
 				}, 500)
@@ -53,24 +60,24 @@ const LogIn = () => {
 	return (
 		<>
 			<div className='flex items-center justify-center select-none'>
-				<div className='w-full max-w-sm border rounded-md p-4 mt-10'>
+				<div className='w-full max-w-sm border rounded-md p-4 mt-10 shadow-md'>
 					<div className='flex flex-col gap-2 items-center'>
 						<input
 							ref={userRef}
 							type="text"
 							placeholder='username'
-							className='input input-bordered input-sm w-full max-w-xs'
+							className='input input-bordered input-sm w-full max-w-xs shadow-md'
 							onChange={handleInputChange}
 						/>
 						<input
 							ref={passwordRef}
 							type="text"
 							placeholder='password'
-							className='input input-bordered input-sm w-full max-w-xs'
+							className='input input-bordered input-sm w-full max-w-xs shadow-md'
 							onChange={handleInputChange}
 						/>
 						<div className='w-full max-w-xs'>
-							{error && <div role="alert" className="alert alert-warning p-1.5">
+							{error && <div role="alert" className="alert alert-warning p-1.5 shadow-md">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									className="h-6 w-6 shrink-0 stroke-current"
@@ -86,7 +93,7 @@ const LogIn = () => {
 							</div>}
 						</div>
 						<div className='w-full max-w-xs'>
-							{success && <div role="alert" className="alert alert-success p-1.5">
+							{success && <div role="alert" className="alert alert-success p-1.5 shadow-md">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									className="h-6 w-6 shrink-0 stroke-current"
@@ -102,7 +109,7 @@ const LogIn = () => {
 							</div>}
 						</div>
 						<div>
-							<div className='btn btn-outline' onClick={login}>Log In</div>
+							<div className='btn btn-outline shadow-md' onClick={login}>Log In</div>
 						</div>
 					</div>
 				</div>

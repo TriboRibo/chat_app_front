@@ -3,6 +3,7 @@ import mainStore from "../store/mainStore.jsx";
 import axios from "axios";
 import {useSocket} from "../plugins/useSocket.jsx";
 import {useNavigate} from "react-router-dom";
+import SingleUserComp from "../components/SingleUserComp.jsx";
 
 const AllUsers = () => {
 
@@ -34,13 +35,11 @@ const AllUsers = () => {
 		<>
 			<div className='user-list'>
 				<h2>Registered Users</h2>
-				<ul>
+				<div className='flex flex-wrap gap-8 justify-center'>
 					{users && users.map(user => (
-						<li key={user._id} onClick={() => handleUserClick(user.name)}>
-							{user.name}
-						</li>
+						<SingleUserComp key={user._id} user={user} onClick={handleUserClick} />
 					))}
-				</ul>
+				</div>
 			</div>
 		</>
 	);

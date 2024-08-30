@@ -65,31 +65,31 @@ const Register = () => {
 	return (
 		<>
 			<div className='flex items-center justify-center select-none'>
-				<div className='w-full max-w-sm border rounded-md p-4 mt-10'>
+				<div className='w-full max-w-sm border rounded-md p-4 mt-10 shadow-md'>
 					<div className='flex flex-col items-center gap-2'>
 						<input
 							ref={userRef}
 							type="text"
 							placeholder='username'
-							className='input input-bordered input-sm w-full max-w-xs'
+							className='input input-bordered input-sm w-full max-w-xs shadow-md'
 							onChange={handleInputChange}
 						/>
 						<input
 							ref={passwordRef}
 							type="text"
 							placeholder='password'
-							className='input input-bordered input-sm w-full max-w-xs'
+							className='input input-bordered input-sm w-full max-w-xs shadow-md'
 							onChange={handleInputChange}
 						/>
 						<input
 							ref={passwordConfirmRef}
 							type="text"
 							placeholder='repeat password'
-							className='input input-bordered input-sm w-full max-w-xs'
+							className='input input-bordered input-sm w-full max-w-xs shadow-md'
 							onChange={handleInputChange}
 						/>
 						<div className='w-full max-w-xs'>
-							{error && <div role="alert" className="alert alert-warning p-1.5">
+							{error && <div role="alert" className="alert alert-warning p-1.5 shadow-md">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									className="h-6 w-6 shrink-0 stroke-current"
@@ -105,7 +105,7 @@ const Register = () => {
 							</div>}
 						</div>
 						<div className='w-full max-w-xs'>
-							{success && <div role="alert" className="alert alert-success p-1.5">
+							{success && <div role="alert" className="alert alert-success p-1.5 shadow-md">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									className="h-6 w-6 shrink-0 stroke-current"
@@ -121,7 +121,7 @@ const Register = () => {
 							</div>}
 						</div>
 						<div>
-							<div className='btn btn-outline w-full' onClick={register}>Register</div>
+							<div className='btn btn-outline w-full shadow-md' onClick={register}>Register</div>
 						</div>
 					</div>
 				</div>
