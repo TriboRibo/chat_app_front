@@ -44,7 +44,7 @@ const LogIn = () => {
 				setCurrentUser(response.data.data)
 				console.log('Current:', response.data.data)
 				setTimeout(() => {
-					nav('/')
+					nav('/profile')
 				}, 500)
 			}
 		} catch (error) {
@@ -71,7 +71,7 @@ const LogIn = () => {
 						/>
 						<input
 							ref={passwordRef}
-							type="text"
+							type="password"
 							placeholder='password'
 							className='input input-bordered input-sm w-full max-w-xs shadow-md'
 							onChange={handleInputChange}
