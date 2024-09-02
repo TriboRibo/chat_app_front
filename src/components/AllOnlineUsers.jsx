@@ -4,7 +4,7 @@ import {useSocket} from "../plugins/useSocket.jsx";
 
 const AllOnlineUsers = () => {
 
-	const {connected, setConnected} = mainStore()
+	const {connected, setConnected, currentUser, setCurrentUser} = mainStore()
 
 	useSocket('connectedUsersUpdate', (users) => {
 		setConnected(users)
@@ -25,18 +25,22 @@ const AllOnlineUsers = () => {
 							connected.map((user) => (
 								<li
 									key={user.id}
-									className='flex justify-between border-2 rounded-md ms-5 pt-3 pb-3 cursor-pointer hover:scale-102'
+									className='flex justify-between h-20 border-2 rounded-md ms-5 pt-3 pb-3 cursor-pointer hover:scale-102'
 								>
 									<div className='flex items-center justify-center gap-2 ps-2'>
 										<img
-											className="ring-primary w-10 rounded-full "
+											className="ring-primary w-12 h-12 rounded-full object-cover"
 											src={user.avatar} alt=""
 										/>
 										{user.username}
 									</div>
-									<div className='flex gap-1 pe-2'>
-										<div className='btn btn-outline'>Add to chat</div>
-										<div className='btn btn-outline'>Write a message</div>
+									<div className='flex gap-1 pe-2 items-center'>
+										{user.username !== currentUser?.username && (
+											<>
+												<div className='btn btn-outline'>Add to chat</div>
+												<div className='btn btn-outline'>Write a message</div>
+											</>
+										)}
 									</div>
 								</li>
 							))
