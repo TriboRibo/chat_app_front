@@ -6,10 +6,11 @@ import AllOnlineUsers from "./AllOnlineUsers.jsx";
 const Toolbar = () => {
 	return (
 		<>
-			<div className='flex gap-1 border rounded-md m-2 p-2 justify-between shadow-md sticky top-2'>
+			<div className='flex gap-1 border rounded-md m-2 p-2 justify-between shadow-md sticky top-2 z-10 bg-base-100'>
 				<div className='flex gap-1'>
 					<Link className='btn btn-outline shadow-md' to='/'>Home</Link>
 					<Link className='btn btn-outline shadow-md' to='/users'>All users</Link>
+					<Link className='btn btn-outline shadow-md' to='profile'>Profile</Link>
 				</div>
 				<div className='flex gap-1'>
 					<button><AllOnlineUsers/></button>

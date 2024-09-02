@@ -7,7 +7,7 @@ import SingleUserComp from "../components/SingleUserComp.jsx";
 
 const AllUsers = () => {
 
-	const {users, setUsers} = mainStore()
+	const {users, setUsers, currentUser} = mainStore()
 	const nav = useNavigate()
 
 	const fetchUsers = async () => {
@@ -28,7 +28,11 @@ const AllUsers = () => {
 	})
 
 	const handleUserClick = (username) => {
-		nav(`/user/${username}`)
+		if (currentUser && username === currentUser.username) {
+			nav('/profile')
+		} else {
+			nav(`/user/${username}`)
+		}
 	}
 
 	return (

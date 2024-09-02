@@ -14,11 +14,11 @@ const AllOnlineUsers = () => {
 		<>
 			{/* The button to open modal */}
 			<label htmlFor="my_modal_7"
-			       className='btn btn-outline shadow-md'>Online: {Array.isArray(connected) ? connected.length : 0}</label>
+			       className='btn btn-outline shadow-md z-20'>Online: {Array.isArray(connected) ? connected.length : 0}</label>
 			{/* Put this part before </body> tag */}
 			<input type="checkbox" id="my_modal_7" className="modal-toggle"/>
-			<div className="modal justify-items-end pe-10" role="dialog">
-				<div className="modal-box cursor-auto">
+			<div className="modal z-50 fixed inset-0 justify-items-center pe-10" role="dialog">
+				<div className="modal-box z-50 cursor-auto">
 					<h3 className="text-lg font-bold">Online:</h3>
 					<ul className="py-4 flex flex-col gap-2">
 						{Array.isArray(connected) && connected.length > 0 ? (
@@ -45,7 +45,7 @@ const AllOnlineUsers = () => {
 						)}
 					</ul>
 				</div>
-				<label className="modal-backdrop scroll-m-1.5" htmlFor="my_modal_7">Close</label>
+				<label className="modal-backdrop scroll-m-1.5 z-40" htmlFor="my_modal_7">Close</label>
 			</div>
 		</>
 	);

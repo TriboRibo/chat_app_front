@@ -8,6 +8,7 @@ import SingleUser from "./pages/SingleUser.jsx";
 import mainStore from "./store/mainStore.jsx";
 import {useEffect} from "react";
 import socket, {useSocket} from "./plugins/useSocket.jsx";
+import Profile from "./pages/Profile.jsx";
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
 						<Route path='/login' element={<LogIn/>}/>
 						<Route path='/users' element={<AllUsers/>}/>
 						<Route path='/user/:name' element={<SingleUser/>}/>
+						<Route path='/profile' element={<Profile/>}/>
 					</Routes>
 				</div>
 			</BrowserRouter>
