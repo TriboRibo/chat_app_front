@@ -9,10 +9,11 @@ import mainStore from "./store/mainStore.jsx";
 import {useEffect} from "react";
 import socket, {useSocket} from "./plugins/useSocket.jsx";
 import Profile from "./pages/Profile.jsx";
+import axios from "axios";
 
 function App() {
 
-	const {setConnected} = mainStore()
+	const {setConnected, setUsers, } = mainStore()
 
 	useEffect(() => {
 		const handleConnectedUsersUpdate = (users) => {
@@ -23,6 +24,19 @@ function App() {
 			socket.off('connectedUsersUpdate', handleConnectedUsersUpdate)
 		}
 	}, [setConnected])
+
+	// const fetchUsers = async () => {
+	// 	try {
+	// 		const response = await axios.get('http://localhost:2000/getAllMembers');
+	// 		setUsers(response.data.users);
+	// 	} catch (error) {
+	// 		console.error('Error fetching users', error);
+	// 	}
+	// };
+	//
+	// useEffect(() => {
+	// 	fetchUsers();
+	// }, [setUsers]);
 
 	return (
 		<>

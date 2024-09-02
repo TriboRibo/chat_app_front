@@ -40,9 +40,13 @@ const AllUsers = () => {
 			<div className='user-list'>
 				<h2>Registered Users</h2>
 				<div className='flex flex-wrap gap-8 justify-center'>
-					{users && users.map(user => (
+					{Array.isArray(users) && users.length > 0 ? (
+						users.map(user => (
 						<SingleUserComp key={user._id} user={user} onClick={handleUserClick} />
-					))}
+						))
+					) : (
+						<p>No users found</p>
+					)}
 				</div>
 			</div>
 		</>

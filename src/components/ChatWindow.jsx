@@ -5,20 +5,21 @@ import mainStore from "../store/mainStore.jsx";
 
 const ChatWindow = () => {
 
-	const {currentUser} = mainStore()
-	const [messages, setMessages] = useState([])
+	const {currentUser, users, messages, addMessages} = mainStore()
 	const [message, setMessage] = useState('')
 	const chatEndRef = useRef(null)
 	const [isModalVisible, setModalVisible] = useState(false)
 
 	useSocket('receiveMessage', (message) => {
-		console.log('Message received:', message)
-		setMessages((prevMessages) => [...prevMessages, message])
+		addMessages(message)
 	})
+
+	useEffect(() => {
+		console.log('ChatWindow Users:', users);
+	}, [users]);
 
 	const handleSendMessage = () => {
 		if (!currentUser) {
-			console.log('No user is logged in. Cannot send message.')
 			setModalVisible(true)
 			return
 		}
@@ -40,9 +41,24 @@ const ChatWindow = () => {
 		}
 	}
 
+	const getUserAvatar = (username) => {
+		if (currentUser){
+			console.log('Current User in getUserAvatar:', currentUser)
+		}
+		if (currentUser && username === currentUser.username) {
+			return currentUser.avatar
+		}
+		if (Array.isArray(users)) {
+			const user = users.find((user) => user.name === username)
+			return user ? user.avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+		}
+		console.log('users not an array:', users)
+		return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
+	}
+
 	useEffect(() => {
 		chatEndRef.current?.scrollIntoView({behavior: 'smooth'})
-	}, [messages])
+	}, [messages, currentUser])
 
 
 	return (
@@ -51,7 +67,6 @@ const ChatWindow = () => {
 				<div
 					className='border-t border-s border-e mt-2 ms-2 me-2 p-4 rounded-t-md flex-1 overflow-y-auto'>
 					{messages.map((msg, index) => {
-						// const user = getUserByUsername(msg.sender);
 						const isOwnMessage = currentUser && msg.sender === currentUser.username; // Replace with actual user name check
 						return (
 							<div
@@ -62,17 +77,17 @@ const ChatWindow = () => {
 									<div className="w-10 rounded-full">
 										<img
 											alt={`${msg.sender}'s avatar`}
-											src={msg.sender === currentUser?.username ? currentUser.avatar : 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'} // Use default if user is not found
+											src={getUserAvatar(msg.sender)} // Use default if user is not found
 										/>
 									</div>
 								</div>
-								<div className="chat-header">
+								<div className="chat-header flex items-center gap-1">
 									{msg.sender}
 									<time
 										className="text-xs opacity-50">{new Date(msg.timestamp).toLocaleTimeString()}</time>
 								</div>
 								<div
-									className={`chat-bubble ${isOwnMessage ? 'chat-bubble-info' : 'chat-bubble-secondary'}`}>
+									className={`chat-bubble break-words ${isOwnMessage ? 'chat-bubble-info' : 'chat-bubble-secondary'}`}>
 									{msg.content}
 								</div>
 								<div className="chat-footer opacity-50">
