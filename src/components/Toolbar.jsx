@@ -98,6 +98,7 @@ const Toolbar = () => {
 				<div className='hidden sm:flex gap-1'>
 					{currentUser ? (
 						<>
+							<Link className='btn btn-outline shadow-md' to='/chat'>Chat rooms</Link>
 							<button><AllOnlineUsers/></button>
 							<button className='btn btn-outline shadow-md' onClick={handleLogout}>Log out</button>
 						</>
