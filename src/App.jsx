@@ -10,6 +10,7 @@ import {useEffect} from "react";
 import socket, {useSocket} from "./plugins/useSocket.jsx";
 import Profile from "./pages/Profile.jsx";
 import axios from "axios";
+import ChatRooms from "./pages/ChatRooms.jsx";
 
 function App() {
 
@@ -60,6 +61,7 @@ function App() {
 						<Route path='/users' element={<AllUsers/>}/>
 						<Route path='/user/:name' element={<SingleUser/>}/>
 						<Route path='/profile' element={<Profile/>}/>
+						<Route path='/chat' element={<ChatRooms/>}/>
 					</Routes>
 				</div>
 			</BrowserRouter>
