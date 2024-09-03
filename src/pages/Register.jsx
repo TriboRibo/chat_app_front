@@ -36,7 +36,6 @@ const Register = () => {
 				password: password,
 				repeatPassword: repeatPassword
 			})
-			console.log(response.data.message)
 			if (response.data.success) {
 				setSuccess(response.data.message)
 				socket.emit('userListUpdate')

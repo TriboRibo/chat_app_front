@@ -14,10 +14,6 @@ const ChatWindow = () => {
 		addMessages(message)
 	})
 
-	useEffect(() => {
-		console.log('ChatWindow Users:', users);
-	}, [users]);
-
 	const handleSendMessage = () => {
 		if (!currentUser) {
 			setModalVisible(true)
@@ -42,9 +38,6 @@ const ChatWindow = () => {
 	}
 
 	const getUserAvatar = (username) => {
-		if (currentUser){
-			console.log('Current User in getUserAvatar:', currentUser)
-		}
 		if (currentUser && username === currentUser.username) {
 			return currentUser.avatar
 		}
@@ -52,7 +45,7 @@ const ChatWindow = () => {
 			const user = users.find((user) => user.name === username)
 			return user ? user.avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
 		}
-		console.log('users not an array:', users)
+		console.log('Expected users to be an array, but got:', users)
 		return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
 	}
 
