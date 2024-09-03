@@ -15,7 +15,6 @@ const SingleUser = () => {
 			try {
 				const response = await axios.get(`http://localhost:2000/getUser/${name}`)
 				setUser(response.data.user)
-				console.log(response.data.user)
 			} catch (error) {
 				setError('Error fetching user details')
 				console.error(error)

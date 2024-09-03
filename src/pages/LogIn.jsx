@@ -28,21 +28,21 @@ const LogIn = () => {
 				name: username,
 				password: password,
 			})
-			console.log('logged in:', response.data)
 			if (!response.data.success) {
-				console.log(response.data.message)
 				setError(response.data.message)
 			} else {
+				const {token, data} = response.data
+				localStorage.setItem('token', token)
+				localStorage.setItem('currentUser', JSON.stringify(data))
+
 				socket.emit('setUsername', {
-					id: response.data.data.id,
-					username: response.data.data.username,
-					avatar: response.data.data.avatar,
+					id: data.id,
+					username: data.username,
+					avatar: data.avatar,
 				})
-				console.log('Logged in success for:', response.data.data)
 				setSuccess('Login successful!')
-				setConnected(response.data.data)
-				setCurrentUser(response.data.data)
-				console.log('Current:', response.data.data)
+				setConnected(data)
+				setCurrentUser(data)
 				setTimeout(() => {
 					nav('/profile')
 				}, 500)

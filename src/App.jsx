@@ -13,10 +13,13 @@ import axios from "axios";
 
 function App() {
 
-	const {setConnected, setUsers, } = mainStore()
+
+	const {setConnected, setUsers, setCurrentUser} = mainStore()
 
 	useEffect(() => {
 		const handleConnectedUsersUpdate = (users) => {
+			const uniqueUsers = Array.from(new Set(users.map(user => user.id)))
+				.map(id => users.find(user => user.id === id))
 			setConnected(users)
 		}
 		socket.on('connectedUsersUpdate', handleConnectedUsersUpdate)
@@ -25,18 +28,25 @@ function App() {
 		}
 	}, [setConnected])
 
-	// const fetchUsers = async () => {
-	// 	try {
-	// 		const response = await axios.get('http://localhost:2000/getAllMembers');
-	// 		setUsers(response.data.users);
-	// 	} catch (error) {
-	// 		console.error('Error fetching users', error);
-	// 	}
-	// };
-	//
-	// useEffect(() => {
-	// 	fetchUsers();
-	// }, [setUsers]);
+	const fetchUsers = async () => {
+		try {
+			const response = await axios.get('http://localhost:2000/getAllMembers');
+			setUsers(response.data.users);
+		} catch (error) {
+			console.error('Error fetching users', error);
+		}
+	};
+
+	useEffect(() => {
+		fetchUsers();
+		const token = localStorage.getItem('token');
+		const user = localStorage.getItem('currentUser');
+
+		if (token && user) {
+			setCurrentUser(JSON.parse(user));
+			socket.emit('setUsername', JSON.parse(user));
+		}
+	}, [setUsers, setCurrentUser]);
 
 	return (
 		<>

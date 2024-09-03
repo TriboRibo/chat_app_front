@@ -12,7 +12,17 @@ const Profile = () => {
 	const [success, setSuccess] = useState(null)
 	const modalInputRef = useRef()
 
-	const {currentUser, setCurrentUser, setConnected, setUsers} = mainStore()
+	const {currentUser, setCurrentUser, setConnected, connected} = mainStore()
+
+	if (!currentUser) {
+		return (
+			<div className="flex items-center justify-center h-screen">
+				<div className="text-center">
+					<span className="loading loading-spinner loading-lg"></span>
+				</div>
+			</div>
+		);
+	}
 
 	const openModal = (title) => {
 		setModalTitle(title)
@@ -28,17 +38,23 @@ const Profile = () => {
 		setError(null);
 		setSuccess(null);
 
+		const inputValue = modalInputRef.current?.value.trim(); // Trim input value
+		if (!inputValue) {
+			setError('Input cannot be empty.');
+			return;
+		}
+
 		if (modalTitle === 'Change username') {
-			changeUsername();
+			changeUsername(inputValue);
 		} else if (modalTitle === 'Change password') {
-			changePassword();
+			changePassword(inputValue);
 		} else if (modalTitle === 'Change avatar') {
-			changeAvatar();
+			changeAvatar(inputValue);
 		}
 	};
 	const changeUsername = async () => {
 		const newUsername = modalInputRef.current?.value
-		const updateData = {userId: currentUser.id, name: newUsername}
+		// const updateData = {userId: currentUser.id, name: newUsername}
 		if (!newUsername || newUsername.length < 4 || newUsername.length > 20) {
 			setError('Username must be between 4 and 20 characters.');
 			return;
@@ -48,7 +64,15 @@ const Profile = () => {
 			return;
 		}
 		try {
-			const response = await axios.post('http://localhost:2000/changeUsername', updateData)
+			const token = localStorage.getItem('token')
+			if (!token){
+				console.error('token not found')
+				return
+			}
+			const response = await axios.post('http://localhost:2000/changeUsername',
+				{ userId: currentUser.id, name: newUsername },
+				{ headers: { Authorization: `Bearer ${token}`}}
+			)
 			handleResponse(response)
 		} catch (error) {
 			setError('An error occurred while updating your username. Please try again.')
@@ -63,11 +87,10 @@ const Profile = () => {
 				username: updatedUser.name,
 				avatar: updatedUser.avatar
 			})
-			// setCurrentUser(updatedUser)
-			setConnected(prev => prev.map(user => user.id === updatedUser.id ? updatedUser : user))
+			setConnected(prev => prev.map(user => user.id === updatedUser.id ? { ...user, avatar: updatedUser.name } : user))
 			socket.emit('setUsername', updatedUser)
-			socket.emit('userListUpdate')
 			socket.emit('userProfileUpdated', updatedUser); // Emit the updated user profile
+			socket.emit('userListUpdate')
 			closeModal()
 	} else {
 			setError(response.data.error || 'an unexpected error occurred.')
@@ -81,7 +104,14 @@ const Profile = () => {
 		}
 		const updateData = { userId: currentUser.id, newPassword: newPassword }
 		try {
-			const response = await axios.post('http://localhost:2000/changePassword', updateData)
+			const token = localStorage.getItem('token')
+			if (!token){
+				console.error('token not found')
+				return
+			}
+			const response = await axios.post('http://localhost:2000/changePassword', updateData, {
+				headers: {Authorization: `Bearer ${token}`}
+			})
 			handlePasswordResponse(response)
 		} catch (error) {
 			setError('An error occurred while updating your password. Please try again.')
@@ -101,26 +131,35 @@ const Profile = () => {
 			setError('Avatar URL is required.')
 			return
 		}
-		const updateData = { userId: currentUser.id, newAvatar: newAvatar }
+		const updateData = { userId: currentUser.id, newAvatar }
 		try {
-			const response = await axios.post('http://localhost:2000/changeAvatar', updateData)
+			const token = localStorage.getItem('token')
+			if (!token){
+				console.error('token not found')
+				return
+			}
+			const response = await axios.post('http://localhost:2000/changeAvatar', updateData, {
+				headers: {Authorization: `Bearer ${token}`}
+			})
 			handleAvatarResponse(response)
 		} catch (error) {
 			setError('An error occurred while updating your avatar. Please try again.')
 		}
 	}
 	const handleAvatarResponse = (response) => {
-		console.log('Avatar Response:', response);
 		if (response.data.success) {
 			const updatedUser = response.data.data;
-			setCurrentUser(updatedUser); // Ensure the current user state is updated
-			setConnected(prev => prev.map(user => user.id === updatedUser.id ? updatedUser : user));
-			setUsers(prevUsers => prevUsers.map(user => user.id === updatedUser.id ? updatedUser : user));
+			setSuccess(response.data.message)
+			setCurrentUser({
+				id: updatedUser.id,
+				username: updatedUser.name,
+				avatar: updatedUser.avatar
+			})
+			setConnected(prev => prev.map(user => user.id === updatedUser.id ? { ...user, avatar: updatedUser.avatar } : user))
 			socket.emit('setUsername', updatedUser)
-			socket.emit('userListUpdate')
 			socket.emit('userProfileUpdated', updatedUser); // Emit the updated user profile
-			setSuccess(response.data.message || 'Avatar updated successfully.');
-			closeModal();
+			socket.emit('userListUpdate')
+			closeModal()
 		} else {
 			setError(response.data.error || 'An unexpected error occurred.');
 		}

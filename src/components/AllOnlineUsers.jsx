@@ -1,14 +1,36 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import mainStore from "../store/mainStore.jsx";
-import {useSocket} from "../plugins/useSocket.jsx";
+import socket, {useSocket} from "../plugins/useSocket.jsx";
 
 const AllOnlineUsers = () => {
 
 	const {connected, setConnected, currentUser, setCurrentUser} = mainStore()
 
-	useSocket('connectedUsersUpdate', (users) => {
-		setConnected(users)
-	})
+	// useSocket('connectedUsersUpdate', (users) => {
+	// 	console.log('Received connected users:', users);
+	// 	setConnected(users)
+	// })
+
+	useEffect(() => {
+		const handleConnectedUsersUpdate = (users) => {
+			if (Array.isArray(users)) {
+				setConnected(users);
+			} else {
+				setConnected([])
+			}
+
+		};
+
+		socket.on('connectedUsersUpdate', handleConnectedUsersUpdate);
+
+		return () => {
+			socket.off('connectedUsersUpdate', handleConnectedUsersUpdate);
+		};
+	}, [setConnected]);
+
+	if (!connected) {
+		return <div>Loading...</div>
+	}
 
 	return (
 		<>
@@ -22,9 +44,9 @@ const AllOnlineUsers = () => {
 					<h3 className="text-lg font-bold">Online:</h3>
 					<ul className="py-4 flex flex-col gap-2">
 						{Array.isArray(connected) && connected.length > 0 ? (
-							connected.map((user) => (
+							connected.map((user, index) =>  user && user.avatar ? (
 								<li
-									key={user.id}
+									key={index}
 									className='flex justify-between h-20 border-2 rounded-md ms-5 pt-3 pb-3 cursor-pointer hover:scale-102'
 								>
 									<div className='flex items-center justify-center gap-2 ps-2'>
@@ -32,7 +54,7 @@ const AllOnlineUsers = () => {
 											className="ring-primary w-12 h-12 rounded-full object-cover"
 											src={user.avatar} alt=""
 										/>
-										{user.username}
+										{user.username || 'unknown'}
 									</div>
 									<div className='flex gap-1 pe-2 items-center'>
 										{user.username !== currentUser?.username && (
@@ -43,7 +65,7 @@ const AllOnlineUsers = () => {
 										)}
 									</div>
 								</li>
-							))
+							) : null )
 						) : (
 							<li>No users online</li>
 						)}
