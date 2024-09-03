@@ -75,14 +75,14 @@ const Register = () => {
 						/>
 						<input
 							ref={passwordRef}
-							type="text"
+							type="password"
 							placeholder='password'
 							className='input input-bordered input-sm w-full max-w-xs shadow-md'
 							onChange={handleInputChange}
 						/>
 						<input
 							ref={passwordConfirmRef}
-							type="text"
+							type="password"
 							placeholder='repeat password'
 							className='input input-bordered input-sm w-full max-w-xs shadow-md'
 							onChange={handleInputChange}

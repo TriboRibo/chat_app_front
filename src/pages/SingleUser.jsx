@@ -42,7 +42,6 @@ const SingleUser = () => {
 					<span
 						style={{cursor: 'pointer'}}
 						className="text-2xl font-semibold">{user.name}</span>
-						<p>Some text or title</p>
 					</div>
 					<button className="btn btn-outline z-10 w-1/2 shadow-md"
 					   onClick={handleSendMessage}
