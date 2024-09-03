@@ -6,10 +6,9 @@ const AllOnlineUsers = () => {
 
 	const {connected, setConnected, currentUser, setCurrentUser} = mainStore()
 
-	// useSocket('connectedUsersUpdate', (users) => {
-	// 	console.log('Received connected users:', users);
-	// 	setConnected(users)
-	// })
+	useSocket('connectedUsersUpdate', (users) => {
+		setConnected(users)
+	})
 
 	useEffect(() => {
 		const handleConnectedUsersUpdate = (users) => {

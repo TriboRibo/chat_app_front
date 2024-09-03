@@ -15,15 +15,16 @@ import ChatRooms from "./pages/ChatRooms.jsx";
 function App() {
 
 
-	const {setConnected, setUsers, setCurrentUser} = mainStore()
+	const {setConnected, setUsers, setCurrentUser, users} = mainStore()
 
 	useEffect(() => {
 		const handleConnectedUsersUpdate = (users) => {
-			const uniqueUsers = Array.from(new Set(users.map(user => user.id)))
-				.map(id => users.find(user => user.id === id))
+			// const users = Array.from(new Set(users.map(user => user.id)))
+			// 	.map(id => users.find(user => user.id === id))
 			setConnected(users)
 		}
 		socket.on('connectedUsersUpdate', handleConnectedUsersUpdate)
+
 		return () => {
 			socket.off('connectedUsersUpdate', handleConnectedUsersUpdate)
 		}
